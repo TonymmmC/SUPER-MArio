@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
     public int stage { get; private set; }
     public int lives { get; private set; }
     public int coins { get; private set; }
+    public int score { get; private set; }
+    public float timeRemaining { get; private set; }
+
+    private bool timerRunning;
 
     private void Awake()
     {
@@ -27,6 +31,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        HUDManager.Instance?.UpdateTime(Mathf.CeilToInt(timeRemaining));
+        HUDManager.Instance?.UpdateScore(score);
+        HUDManager.Instance?.UpdateCoins(coins);
+    }
+
     private void Start()
     {
         Application.targetFrameRate = 60;
@@ -34,18 +55,37 @@ public class GameManager : MonoBehaviour
         NewGame();
     }
 
+    private void Update()
+    {
+        if (!timerRunning) return;
+
+        // Ticks a 2.5 unidades/segundo para sentirse como el Mario clásico
+        timeRemaining -= Time.deltaTime * 2.5f;
+
+        if (timeRemaining <= 0f)
+        {
+            timeRemaining = 0f;
+            timerRunning = false;
+            Player player = FindObjectOfType<Player>();
+            if (player != null && !player.dead) {
+                player.Death();
+            }
+        }
+
+        HUDManager.Instance?.UpdateTime(Mathf.CeilToInt(timeRemaining));
+    }
+
     public void NewGame()
     {
         lives = 3;
         coins = 0;
+        score = 0;
 
         LoadLevel(1, 1);
     }
 
     public void GameOver()
     {
-        // TODO: show game over screen
-
         NewGame();
     }
 
@@ -53,6 +93,8 @@ public class GameManager : MonoBehaviour
     {
         this.world = world;
         this.stage = stage;
+        timeRemaining = 400f;
+        timerRunning = true;
 
         SceneManager.LoadScene($"{world}-{stage}");
     }
@@ -64,6 +106,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetLevel(float delay)
     {
+        timerRunning = false;
         CancelInvoke(nameof(ResetLevel));
         Invoke(nameof(ResetLevel), delay);
     }
@@ -82,17 +125,32 @@ public class GameManager : MonoBehaviour
     public void AddCoin()
     {
         coins++;
+        AddScore(100);
 
         if (coins == 100)
         {
             coins = 0;
             AddLife();
         }
+
+        HUDManager.Instance?.UpdateCoins(coins);
+        AudioManager.Instance?.PlayCoin();
     }
 
     public void AddLife()
     {
         lives++;
+    }
+
+    public void AddScore(int points)
+    {
+        score += points;
+        HUDManager.Instance?.UpdateScore(score);
+    }
+
+    public void AddEnemyKill()
+    {
+        AddScore(200);
     }
 
 }

@@ -29,6 +29,9 @@ public class Goomba : MonoBehaviour
 
     private void Flatten()
     {
+        AudioManager.Instance?.PlayStomp();
+        GameManager.Instance?.AddEnemyKill();
+
         GetComponent<Collider2D>().enabled = false;
         GetComponent<EntityMovement>().enabled = false;
         GetComponent<AnimatedSprite>().enabled = false;
@@ -38,6 +41,8 @@ public class Goomba : MonoBehaviour
 
     private void Hit()
     {
+        GameManager.Instance?.AddEnemyKill();
+
         GetComponent<AnimatedSprite>().enabled = false;
         GetComponent<DeathAnimation>().enabled = true;
         Destroy(gameObject, 3f);
