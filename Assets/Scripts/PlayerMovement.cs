@@ -74,9 +74,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void HorizontalMovement()
     {
-        // accelerate / decelerate
-        inputAxis = Input.GetAxis("Horizontal");
-        velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, moveSpeed * Time.deltaTime);
+        inputAxis = Input.GetAxisRaw("Horizontal");
+
+        float rate = Mathf.Abs(inputAxis) > 0.1f
+            ? moveSpeed * 3f   // acelera rápido al presionar
+            : moveSpeed * 6f;  // frena más rápido al soltar
+
+        velocity.x = Mathf.MoveTowards(velocity.x, inputAxis * moveSpeed, rate * Time.deltaTime);
 
         // check if running into a wall
         if (rigidbody.Raycast(Vector2.right * velocity.x)) {
@@ -97,8 +101,8 @@ public class PlayerMovement : MonoBehaviour
         velocity.y = Mathf.Max(velocity.y, 0f);
         jumping = velocity.y > 0f;
 
-        // perform jump
-        if (Input.GetButtonDown("Jump"))
+        // perform jump — teclado (Space) o mando Xbox (botón A)
+        if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.JoystickButton0))
         {
             velocity.y = jumpForce;
             jumping = true;

@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
 
     public void Death()
     {
+        AudioManager.Instance?.StopMusic();
         AudioManager.Instance?.PlayDeath();
 
         smallRenderer.enabled = false;

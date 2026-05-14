@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip damageSFX;
     public AudioClip deathSFX;
     public AudioClip coinSFX;
+    public AudioClip stageClearSFX;
 
     private AudioSource musicSource;
     private AudioSource sfxSource;
@@ -40,6 +41,22 @@ public class AudioManager : MonoBehaviour
         if (Instance == this) Instance = null;
     }
 
+    private void OnEnable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        // Reinicia la música al recargar el nivel (ej. tras morir)
+        PlayMusic();
+    }
+
     private void Start()
     {
         if (backgroundMusic != null) {
@@ -54,6 +71,14 @@ public class AudioManager : MonoBehaviour
         musicSource.Play();
     }
 
+    public void PlayMusic()
+    {
+        if (backgroundMusic != null) {
+            musicSource.clip = backgroundMusic;
+            musicSource.Play();
+        }
+    }
+
     public void StopMusic() => musicSource.Stop();
 
     public void PlaySFX(AudioClip clip)
@@ -61,10 +86,11 @@ public class AudioManager : MonoBehaviour
         if (clip != null) sfxSource.PlayOneShot(clip);
     }
 
-    public void PlayJump()    => PlaySFX(jumpSFX);
-    public void PlayStomp()   => PlaySFX(stompSFX);
-    public void PlayPowerup() => PlaySFX(powerupSFX);
-    public void PlayDamage()  => PlaySFX(damageSFX);
-    public void PlayDeath()   => PlaySFX(deathSFX);
-    public void PlayCoin()    => PlaySFX(coinSFX);
+    public void PlayJump()       => PlaySFX(jumpSFX);
+    public void PlayStomp()      => PlaySFX(stompSFX);
+    public void PlayPowerup()    => PlaySFX(powerupSFX);
+    public void PlayDamage()     => PlaySFX(damageSFX);
+    public void PlayDeath()      => PlaySFX(deathSFX);
+    public void PlayCoin()       => PlaySFX(coinSFX);
+    public void PlayStageClear() { StopMusic(); PlaySFX(stageClearSFX); }
 }

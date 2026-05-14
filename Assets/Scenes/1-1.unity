@@ -1599,13 +1599,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24247bafd8879348bffd46918d8a7a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundMusic: {fileID: 0}
-  jumpSFX: {fileID: 0}
-  stompSFX: {fileID: 0}
-  powerupSFX: {fileID: 0}
-  damageSFX: {fileID: 0}
-  deathSFX: {fileID: 0}
-  coinSFX: {fileID: 0}
+  backgroundMusic: {fileID: 8300000, guid: 4000a254946cd074fbf99e7e3c1e3e92, type: 3}
+  jumpSFX: {fileID: 8300000, guid: 517531b95e846a84286aec7d392fef37, type: 3}
+  stompSFX: {fileID: 8300000, guid: b804f89b57616944f9b9835a6bdeb20b, type: 3}
+  powerupSFX: {fileID: 8300000, guid: ffd54077d5fe3e146a5908f2e84a0116, type: 3}
+  damageSFX: {fileID: 8300000, guid: 29559d2d7e2d5d64db5e0f87ed7a66ce, type: 3}
+  deathSFX: {fileID: 8300000, guid: dc210c2f55e5d2946b4fd96e358be5de, type: 3}
+  coinSFX: {fileID: 8300000, guid: 50f5994ad57fabb479102457941d0615, type: 3}
 --- !u!4 &319069748
 Transform:
   m_ObjectHideFlags: 0
