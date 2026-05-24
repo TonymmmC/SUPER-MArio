@@ -7,6 +7,8 @@ public class GameOverScreen : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.Instance?.StopMusic();
+
         if (gameOverMusic != null)
         {
             if (AudioManager.Instance != null)
