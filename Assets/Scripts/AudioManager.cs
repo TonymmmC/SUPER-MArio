@@ -53,20 +53,14 @@ public class AudioManager : MonoBehaviour
 
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
     {
-        // Reinicia la música al recargar el nivel (ej. tras morir)
-        PlayMusic();
+        // La música la inicia el componente LevelMusic de cada escena
     }
 
-    private void Start()
-    {
-        if (backgroundMusic != null) {
-            musicSource.clip = backgroundMusic;
-            musicSource.Play();
-        }
-    }
+    private void Start() { }
 
     public void PlayMusic(AudioClip clip)
     {
+        if (clip == null) return;
         musicSource.clip = clip;
         musicSource.Play();
     }

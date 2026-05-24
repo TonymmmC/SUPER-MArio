@@ -33,7 +33,14 @@ public class BlockHit : MonoBehaviour
             Instantiate(item, transform.position, Quaternion.identity);
         }
 
-        StartCoroutine(Animate());
+        if (!HasBlockAbove())
+            StartCoroutine(Animate());
+    }
+
+    private bool HasBlockAbove()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 1.1f);
+        return hit.collider != null && hit.collider.gameObject != gameObject;
     }
 
     private IEnumerator Animate()

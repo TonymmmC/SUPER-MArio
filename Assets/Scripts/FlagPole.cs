@@ -34,6 +34,7 @@ public class FlagPole : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
+        GameManager.Instance.SavePlayerState(player.GetComponent<Player>());
         AudioManager.Instance?.PlayMusic();
         GameManager.Instance.LoadLevel(nextWorld, nextStage);
     }

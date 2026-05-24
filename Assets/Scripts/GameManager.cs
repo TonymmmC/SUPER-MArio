@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public int coins { get; private set; }
     public int score { get; private set; }
     public float timeRemaining { get; private set; }
+    public bool wasBig { get; private set; }
 
     private bool timerRunning;
 
@@ -46,13 +47,45 @@ public class GameManager : MonoBehaviour
         HUDManager.Instance?.UpdateTime(Mathf.CeilToInt(timeRemaining));
         HUDManager.Instance?.UpdateScore(score);
         HUDManager.Instance?.UpdateCoins(coins);
+
+        if (wasBig)
+        {
+            Player player = FindAnyObjectByType<Player>();
+            if (player != null && !player.big)
+                player.Grow();
+        }
+    }
+
+    public void SavePlayerState(Player player)
+    {
+        wasBig = player != null && player.big;
     }
 
     private void Start()
     {
         Application.targetFrameRate = 60;
 
-        NewGame();
+        string scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+        if (scene == "MainMenu" || scene == "GameOver")
+        {
+            // Solo inicializar stats, el boton Play del menu llama a NewGame()
+            lives = 3; coins = 0; score = 0; timeRemaining = 400f; timerRunning = false;
+        }
+        else
+        {
+            // Arranca directamente desde un nivel (prueba en editor)
+            lives = 3; coins = 0; score = 0;
+            timeRemaining = 400f;
+            timerRunning = true;
+
+            string[] parts = scene.Split('-');
+            if (parts.Length == 2 && int.TryParse(parts[0], out int w) && int.TryParse(parts[1], out int s))
+            {
+                world = w;
+                stage = s;
+            }
+        }
     }
 
     private void Update()
@@ -66,7 +99,7 @@ public class GameManager : MonoBehaviour
         {
             timeRemaining = 0f;
             timerRunning = false;
-            Player player = FindObjectOfType<Player>();
+            Player player = FindAnyObjectByType<Player>();
             if (player != null && !player.dead) {
                 player.Death();
             }
@@ -86,7 +119,9 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        NewGame();
+        timerRunning = false;
+        AudioManager.Instance?.StopMusic();
+        SceneManager.LoadScene("GameOver");
     }
 
     public void LoadLevel(int world, int stage)

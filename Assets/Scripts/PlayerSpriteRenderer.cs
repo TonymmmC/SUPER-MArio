@@ -18,6 +18,13 @@ public class PlayerSpriteRenderer : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (movement.swimming && !movement.grounded)
+        {
+            run.enabled = false;
+            spriteRenderer.sprite = jump;
+            return;
+        }
+
         run.enabled = movement.running;
 
         if (movement.jumping) {

@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
     public bool big => bigRenderer.enabled;
     public bool dead => deathAnimation.enabled;
     public bool starpower { get; private set; }
-
     private void Awake()
     {
         capsuleCollider = GetComponent<CapsuleCollider2D>();

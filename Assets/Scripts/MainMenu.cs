@@ -60,7 +60,7 @@ public class MainMenu : MonoBehaviour
 
     private void StartGame()
     {
-        SceneManager.LoadScene("1-1");
+        GameManager.Instance.NewGame();
     }
 
     private void QuitGame()
