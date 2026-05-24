@@ -10,7 +10,7 @@ public class GameOverScreen : MonoBehaviour
         if (gameOverMusic != null)
             AudioManager.Instance?.PlayMusic(gameOverMusic);
 
-        Invoke(nameof(BackToMenu), 4f);
+        Invoke(nameof(BackToMenu), 5f);
     }
 
     private void BackToMenu()
