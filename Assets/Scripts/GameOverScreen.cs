@@ -8,7 +8,17 @@ public class GameOverScreen : MonoBehaviour
     private void Start()
     {
         if (gameOverMusic != null)
-            AudioManager.Instance?.PlayMusic(gameOverMusic);
+        {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayMusic(gameOverMusic);
+            else
+            {
+                AudioSource src = gameObject.AddComponent<AudioSource>();
+                src.clip = gameOverMusic;
+                src.loop = false;
+                src.Play();
+            }
+        }
 
         Invoke(nameof(BackToMenu), 5f);
     }
