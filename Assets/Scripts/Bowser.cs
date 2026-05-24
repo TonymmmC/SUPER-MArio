@@ -34,7 +34,7 @@ public class Bowser : MonoBehaviour
     public float spawnInterval = 0.5f;
     public float spawnIntervalEnraged = 0.3f;
     public GameObject mushroomPrefab;
-    [Range(0f, 1f)] public float mushroomChance = 0.5f;
+    [Range(0f, 1f)] public float mushroomChance = 0.25f;
 
     [Header("Fight")]
     public float vulnerableTime = 2.5f;
